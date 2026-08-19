@@ -111,7 +111,7 @@ cost; it's the honest engineering trade-off, not a free lunch.
 ## How to run
 
 All scripts are self-contained MATLAB (Control System Toolbox: `tf`, `feedback`, `margin`,
-`bode`, `step`, `minreal`). Run in order 01 → 07; each is independent (no `.mat` hand-off), so
+`bode`, `step`, `minreal`). Run in order 01 → 06; each is independent (no `.mat` hand-off), so
 you can also cherry-pick.
 
 ```
