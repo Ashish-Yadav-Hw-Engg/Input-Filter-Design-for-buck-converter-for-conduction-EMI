@@ -149,5 +149,5 @@ or just open in the MATLAB GUI and run — every script saves its figures automa
 
 - R. D. Middlebrook, "Input Filter Considerations in Design and Application of Switching
   Regulators," *IEEE IAS Annual Meeting*, 1976.
-- 
+  
 
