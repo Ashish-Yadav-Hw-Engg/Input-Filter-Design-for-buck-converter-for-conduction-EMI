@@ -24,7 +24,7 @@ This repo answers one question with MATLAB, in three acts:
 
 Act 1 — The interaction (scripts 01–04)
 
-- **`01_converter_baseline.m`** — The synchronous buck + PID voltage loop, standalone.
+- **`Converter_baseline.m`** — The synchronous buck + PID voltage loop, standalone.
   Computes `Gvd`, the loop gain `T`, and gain/phase margin with `margin()`. This is the
   "converter alone is stable" baseline. It also plots the converter's **closed-loop input
   impedance** `Zi` — note it goes **negative** at low frequency. That negative incremental
@@ -32,19 +32,19 @@ Act 1 — The interaction (scripts 01–04)
   problem, and it's shown here *before* any filter exists, so it's clearly a converter property,
   not a filter artifact.
 
-- **`02_input_filter_design.m`** — The Lf–Cf input filter, designed only against an EMI
+- **`Input_filter_design.m`** — The Lf–Cf input filter, designed only against an EMI
   attenuation spec (85 dB at `fs` = 1 MHz), evaluated **in isolation** (terminated in its own
   characteristic impedance / open circuit). By itself it's a clean, well-behaved 2nd-order
   low-pass — "the filter alone is fine."
 
-- **`03_combined_gvd_bode.m`** — Uses the Extra Element Theorem (EET) to fold the filter's
+- **`Combined_gvd_bode.m`** — Uses the Extra Element Theorem (EET) to fold the filter's
   output impedance `Zo` into the converter's control-to-output transfer function, producing
   `Gvd_filter`. Bode overlay of `Gvdold` (no filter) vs `Gvd_filter` (with filter) — **this is
   the plot that visually shows the filter corrupting the plant seen by the compensator.**
   Also overlays `Zo`, `ZN`, `ZD` on one plot, since their relative magnitudes are exactly what
   Act 2 turns into a design criterion.
 
-- **`04_stability_with_without_filter.m`** — Closes the loop both ways and runs `margin()` and
+- **`Stability_with_without_filter.m`** — Closes the loop both ways and runs `margin()` and
   `step()` on each. **This is the reveal**: Case 1 (no filter) has healthy GM/PM; Case 2 (with
   filter) shows degraded/negative margin and a ringing or diverging step response — while both
   the converter alone (script 01) and the filter alone (script 02) looked completely fine.
@@ -56,7 +56,7 @@ holds for the assembled system. Source and load impedances interact.
 
 ## Act 2 — The criterion (script 05)
 
-**`05_middlebrook_criterion.m`**
+**`Middlebrook_criterion.m`**
 
 R.D. Middlebrook's 1976 result, reduced to a design rule: the converter's closed-loop input
 impedance `Zi` (computed in script 01) is not just a curiosity — treat the filter as a
@@ -83,7 +83,7 @@ from impedances you already have. This turns "huh, it oscillates" into a spec yo
 
 ## Act 3 — The fix (scripts 06)
 
-### `06_single_stage_damping.m`
+### `Single_stage_damping.m`
 
 Adds a classic **parallel RC damping branch** (`Rd` in series with a DC-blocking cap `Cb`,
 paralleled across `Cf`) — damps the filter's resonant peak without adding continuous power loss
@@ -131,7 +131,26 @@ or just open in the MATLAB GUI and run — every script saves its figures automa
 ├── 04_stability_with_without_filter.m
 ├── 05_middlebrook_criterion.m
 ├── 06_single_stage_damping.m
-└── figures/            <- generated .png/.fig output lands here
+└── plots/
+    ├── 01_converter_baseline/
+    │   └── Loop_gain_of_converter.pdf (and .png)
+    ├── 02_input_filter_design/
+    │   ├── Filter_Frequency_Response_standalone_unloaded.pdf
+    │   └── Filter_output_impedance_Zo_standalone.pdf
+    ├── 03_combined_gvd_bode/
+    │   ├── Gvdold_no_filter_vs_Gvd_with_Filter.pdf
+    │   └── Interaction_of_Zo_with_Zi.pdf
+    ├── 04_stability_with_without_filter/
+    │   ├── Loop_Gain_T_no_filter_vs_with_input_filter.pdf
+    │   └── Closed_loop_step_response_no_filter_vs_with_filter.pdf
+    ├── 05_middlebrook_criterion/
+    │   ├── Middlebrook_criterion_Zo_should_stay_below_Zi.pdf
+    │   └── Minor_loop_gain_Tm_Zo_Zi.pdf
+    └── 06_single_stage_damping/
+        ├── Undamped_filter_loop_gain_margin.pdf
+        ├── Damped_filter_loop_gain_margin.pdf
+        ├── Sweep_closed_loop_margin_vs_damping_resistor.pdf
+        └── step_response_undamped_vs_damped.pdf
 ```
 
 ## Converter parameters (used throughout)
